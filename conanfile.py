@@ -46,7 +46,7 @@ class FLACConan(ConanFile):
             # TODO SHARED
 
             m32_suff = " -m32" if self.settings.arch == "x86" else ""
-            config_options_string = "-d " + config_options_string if self.settings.build_type == "Debug" else ""
+            config_options_string = "-d " if self.settings.build_type == "Debug" else ""
             m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
             self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install %s %s' % (cd_build, env_line, m32_pref, config_options_string, m32_suff))
             self.run("%s && %s make install" % (cd_build, env_line))
