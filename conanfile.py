@@ -45,10 +45,11 @@ class FLACConan(ConanFile):
 
             # TODO SHARED
 
-            m32_suff = " -m32" if self.settings.arch == "x86" else ""
-            config_options_string = 'CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" LDFLAGS="-ggdb3" ' if self.settings.build_type == "Debug" else ""
+            arch = " -m32 " if self.settings.arch == "x86" else ""
+            debug = " -ggdb3 " if self.settings.build_type == "Debug" else ""
+            config_options_string = ' CFLAGS="%s %s" CXXFLAGS="%s %s" LDFLAGS="%s %s" ' % (arch, debug, arch, debug, arch, debug)
             m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
-            self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install %s %s' % (cd_build, env_line, m32_pref, config_options_string, m32_suff))
+            self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install %s' % (cd_build, env_line, m32_pref, config_options_string))
             self.run("%s && %s make install" % (cd_build, env_line))
 
     def package(self):
