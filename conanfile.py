@@ -50,7 +50,7 @@ class FLACConan(ConanFile):
             
             # TODO SHARED
 
-            arch = '--build=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"' if self.settings.arch == "x86" else ""
+            arch = '--host=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"' if self.settings.arch == "x86" else ""
             m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
             self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install %s' % (cd_build, env_line, m32_pref, arch))
             self.run("%s && %s make install" % (cd_build, env_line))
