@@ -41,3 +41,5 @@ install:
   - ./.travis/install.sh
 script:
   - ./.travis/run.sh
+after_script:
+  - for f in $(find ~/.conan/ -name 'config.log'); do cat $f; done
