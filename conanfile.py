@@ -38,21 +38,15 @@ class FLACConan(ConanFile):
             platform = "Win32" if self.settings.arch == "x86" else "x64"
             self.run("%s && %s && msbuild FLAC.sln /t:%s /p:BuildProjectReferences=true /property:Configuration=%s /property:Platform=%s" % (env_line, cd_build, ms_project, self.settings.build_type, platform))
         else:
-            debug = " -g " if self.settings.build_type == "Debug" else ""
-            
             if self.options.fPIC:
                 env_line = env.command_line.replace('CFLAGS="', 'CFLAGS="-fPIC ')
             else:
                 env_line = env.command_line
-            env_line = env_line.replace('CFLAGS="',   'CFLAGS="%s ' %   debug)
-            env_line = env_line.replace('CPPFLAGS="', 'CPPFLAGS="%s ' % debug)
-            env_line = env_line.replace('LDFLAGS="',  'LDFLAGS="%s ' %  debug)
             
             # TODO SHARED
             
-            m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
-            self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install' % (cd_build, env_line, m32_pref))
-            self.run("%s && %s %s make install" % (cd_build, env_line, m32_pref))
+            self.run('mkdir -p install && %s && chmod +x ./configure && %s ./configure --prefix=$(pwd)/../install' % (cd_build, env_line))
+            self.run("%s && %s make install" % (cd_build, env_line))
 
     def package(self):
         self.copy("FindFLAC.cmake", ".", ".")
