@@ -49,11 +49,10 @@ class FLACConan(ConanFile):
             env_line = env_line.replace('LDFLAGS="',  'LDFLAGS="%s ' %  debug)
             
             # TODO SHARED
-
-            arch = '--host=i686-pc-linux-gnu "CFLAGS=-m32" "CPPFLAGS=-m32" "LDFLAGS=-m32"' if self.settings.arch == "x86" else ""
+            
             m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
             self.run('mkdir -p install && %s && chmod +x ./configure && %s %s ./configure --prefix=$(pwd)/../install' % (cd_build, env_line, m32_pref))
-            self.run("%s && %s make install" % (cd_build, env_line))
+            self.run("%s && %s %s make install" % (cd_build, env_line, m32_pref))
 
     def package(self):
         self.copy("FindFLAC.cmake", ".", ".")
