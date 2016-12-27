@@ -38,7 +38,7 @@ class FLACConan(ConanFile):
             platform = "Win32" if self.settings.arch == "x86" else "x64"
             self.run("%s && %s && msbuild FLAC.sln /t:%s /p:BuildProjectReferences=true /property:Configuration=%s /property:Platform=%s" % (env_line, cd_build, ms_project, self.settings.build_type, platform))
         else:
-            debug = " -ggdb3 " if self.settings.build_type == "Debug" else ""
+            debug = " -g " if self.settings.build_type == "Debug" else ""
             
             if self.options.fPIC:
                 env_line = env.command_line.replace('CFLAGS="', 'CFLAGS="-fPIC ')
